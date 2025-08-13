@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
@@ -9,32 +9,48 @@ export class UserService {
 
 
   async create(data: CreateUserDto) {
-    const userExists = await this.prisma.user.findUnique({
+    try {
+      console.log('Entrando no service')
+
+      console.log('Username: ', data.username)
+
+      const userExists = await this.prisma.user.findUnique({
       where: {
-        username: data.name, // Trocar para username
+        username: data.username,
       },
       select: {
         id: true,
       }
-    })
+      })
 
-    if(userExists) {
-      throw new BadRequestException('User already exists')
+      if(userExists) {
+        throw new BadRequestException('User already exists')
+      }
+
+
+
+      const createdUser = await this.prisma.user.create({
+        data: {
+          username: data.username,
+          name: data.name,
+          password: data.password,
+        },
+      })
+
+      return createdUser;
+    
+    } catch(err) {
+      console.error(err)
+      throw new InternalServerErrorException('Internal Server Error')
     }
-
-    const createdUser = await this.prisma.user.create({
-      data: {
-        usernmane: data.name,
-        name: data.name,
-        password: data.password,
-      },
-    })
-
-    return createdUser;
   }
 
   async findAll() {
-    const users = await this.prisma.user.findAll()
+    const users = await this.prisma.user.findMany()
+
+    if(!users || users === null) {
+      throw new NotFoundException('Users not found')
+    }
 
     return users
   }

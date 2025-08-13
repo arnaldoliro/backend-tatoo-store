@@ -7,28 +7,25 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async getUsers() {
+    return this.userService.findAll()
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async getUser(@Param('id') id: string) {
+    return this.userService.findById(id)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Post('create')
+  async createUser(@Body() data: CreateUserDto) {
+    console.log('Requisição recebida')
+    console.log('Dados Recebidos: ', data)
+    return this.userService.create(data)
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async deleteUser(@Param('id') id: string) {
+    return this.userService.delete(id)
   }
 }
