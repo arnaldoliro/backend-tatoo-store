@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AuthService } from './auth.service';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { AuthRegisterDto } from './dto/register.dto';
+import { UserLoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -9,13 +10,13 @@ export class AuthController {
 
   // @Public()
   @Post('login')
-  async singIn(@Body() auth) {
-    return await this.authService.signIn(auth)
+  async singIn(@Body() data: UserLoginDto) {
+    return await this.authService.signIn(data)
   }
 
   @Post('register')
-  async register(@Body() auth: AuthRegisterDto) {
-    return await this.authService.register(auth)
+  async register(@Body() data: AuthRegisterDto) {
+    return await this.authService.signUp(data)
   }
 
   // @Get('profile')

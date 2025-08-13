@@ -10,13 +10,9 @@ export class UserService {
 
   async create(data: CreateUserDto) {
     try {
-      console.log('Entrando no service')
-
-      console.log('Username: ', data.username)
-
       const userExists = await this.prisma.user.findUnique({
       where: {
-        username: data.username,
+        email: data.email,
       },
       select: {
         id: true,
@@ -31,7 +27,7 @@ export class UserService {
 
       const createdUser = await this.prisma.user.create({
         data: {
-          username: data.username,
+          email: data.email,
           name: data.name,
           password: data.password,
         },
@@ -82,9 +78,9 @@ export class UserService {
     return user;
   }
 
-  async findByUsername(username: string) {
+  async findByEmail(email: string) {
     const user = await this.prisma.user.findUnique({
-      where: { username },
+      where: { email },
     });
 
     if (!user) {
@@ -128,9 +124,9 @@ export class UserService {
     });
   }
 
-  updatePassword(username: string, newPassword: string) {
+  updatePassword(email: string, newPassword: string) {
     return this.prisma.user.update({
-      where: { username },
+      where: { email },
       data: {
         password: newPassword,
       },
