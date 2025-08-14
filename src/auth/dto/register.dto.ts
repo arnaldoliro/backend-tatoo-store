@@ -3,20 +3,20 @@ import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
 
 export class AuthRegisterDto {
   @ApiProperty({
-    example: 'TITAN DA POLI',
+    example: 'Seu Nome',
   })
   @IsNotEmpty({ message: 'Name is required' })
   name: string;
 
   @IsNotEmpty({ message: 'Username is required' })
   @ApiProperty({
-    example: 'icarolindo@titanci.com.br',
+    example: 'seuemail@example.com',
   })
   @IsEmail({}, { message: 'Username must be a valid e-mail' })
   email: string;
 
   @ApiProperty({
-    example: 'TIT@Ndapoli2019',
+    example: 'Senh@1234',
   })
   @IsNotEmpty({ message: 'Password is required' })
   @Matches(
