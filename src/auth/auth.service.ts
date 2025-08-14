@@ -2,12 +2,14 @@ import { BadRequestException, Injectable, InternalServerErrorException, Unauthor
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService
   ) {}
 
   async signUp(email: string, password: string, name: string) {
@@ -34,6 +36,11 @@ export class AuthService {
 
     } catch (error) {
       console.error(error);
+
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
       throw new InternalServerErrorException('Internal Server Error');
     }
   }
@@ -52,12 +59,17 @@ export class AuthService {
         throw new UnauthorizedException('Invalid Credentials')
       }
 
-      const { password: _, ...result } = user;
-      return result
+      const payload = { userame: user.email, sub: user.id }
+      return { accessToken: this.jwtService.sign(payload) }
 
     } catch (error) {
-      console.error(error)
-      throw new InternalServerErrorException('Internal Server Error')
+      console.error(error);
+
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Internal Server Error');
     }
   }
 }
