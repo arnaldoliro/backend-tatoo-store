@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthRegisterDto } from 'src/auth/dto/register.dto';
 
 @Controller('user')
 export class UserController {
@@ -18,9 +19,7 @@ export class UserController {
   }
 
   @Post('create')
-  async createUser(@Body() data: CreateUserDto) {
-    console.log('Requisição recebida')
-    console.log('Dados Recebidos: ', data)
+  async createUser(data: AuthRegisterDto) {
     return this.userService.create(data)
   }
 

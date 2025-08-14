@@ -21,7 +21,7 @@ enum UserRole {
 model User {
   id       String   @id @default(nanoid()) @db.Char(21)
   name     String
-  username String   @unique
+  email String   @unique
   password String
   role     UserRole @default(USER)
 
@@ -30,7 +30,7 @@ model User {
 
   RefreshToken RefreshToken[]
 
-  @@index([username, name], name: "idx_user_email")
+  @@index([email, name], name: "idx_user_email")
   @@map("users")
 }
 
