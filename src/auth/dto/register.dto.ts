@@ -13,7 +13,7 @@ export class AuthRegisterDto {
     example: 'icarolindo@titanci.com.br',
   })
   @IsEmail({}, { message: 'Username must be a valid e-mail' })
-  username: string;
+  email: string;
 
   @ApiProperty({
     example: 'TIT@Ndapoli2019',

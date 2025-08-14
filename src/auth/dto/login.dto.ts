@@ -6,7 +6,7 @@ export class UserLoginDto {
     example: 'contato@titanci.com.br',
   })
   @IsEmail({}, { message: 'Username must be a valid e-mail' })
-  username: string;
+  email: string;
 
   @IsNotEmpty()
   @ApiProperty({

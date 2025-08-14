@@ -11,12 +11,14 @@ export class AuthController {
   // @Public()
   @Post('login')
   async singIn(@Body() data: UserLoginDto) {
-    return await this.authService.signIn(data)
+    const { email, password } = data
+    return await this.authService.signIn(email, password)
   }
 
   @Post('register')
   async register(@Body() data: AuthRegisterDto) {
-    return await this.authService.signUp(data)
+    const {email, password, name} = data
+    return await this.authService.signUp(email, password, name)
   }
 
   // @Get('profile')

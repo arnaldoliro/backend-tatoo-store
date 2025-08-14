@@ -2,13 +2,14 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { AuthRegisterDto } from 'src/auth/dto/register.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
 
-  async create(data: CreateUserDto) {
+  async create(data: AuthRegisterDto) {
     try {
       const userExists = await this.prisma.user.findUnique({
       where: {
